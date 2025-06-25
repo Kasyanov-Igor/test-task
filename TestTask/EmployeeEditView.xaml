@@ -1,4 +1,4 @@
-﻿<Window x:Class="TestTask.CounterpartyEditView"
+﻿<Window x:Class="TestTask.EmployeeEditView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,18 +17,17 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,10">
-            <Label Content="Наименование:" />
+            <Label Content="ФИО" />
             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="300" />
 
-            <Label Content="ИНН:" Margin="0,10,0,0" />
-            <TextBox Text="{Binding INN, UpdateSourceTrigger=PropertyChanged}" Width="300" />
+            <Label Content="Должность:" Margin="0,10,0,0" />
+            <ComboBox
+            ItemsSource="{Binding JobTitles}"
+             SelectedItem="{Binding SelectedJobTitle, Mode=TwoWay}" />
 
-            <Label Content="Куратор:" Margin="0,10,0,0" />
-            <ComboBox Width="300"
-          ItemsSource="{Binding Employees}"
-          DisplayMemberPath="UserName"
-          SelectedValuePath="Id"
-          SelectedValue="{Binding CuratorEmployeeId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Content="Дата рождения:" Margin="0,10,0,0" />
+            <DatePicker SelectedDate="{Binding DOB, Mode=TwoWay}" />
+
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" >

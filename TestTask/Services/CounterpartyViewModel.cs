@@ -11,9 +11,9 @@ namespace TestTask.Services
 	{
 		private readonly IRepository<Counterparty> _repository;
 
-        private readonly IRepository<Employee> _repositoryEmployee;
+		private readonly IRepository<Employee> _repositoryEmployee;
 
-        public ObservableCollection<Counterparty> Counterparties { get; } = new();
+		public ObservableCollection<Counterparty> Counterparties { get; } = new();
 
 		private Counterparty _selectedCounterparty;
 		public Counterparty SelectedCounterparty
@@ -36,7 +36,7 @@ namespace TestTask.Services
 			this._repositoryEmployee = repositoryEmployee;
 
 
-            LoadCommand = new RelayCommand(async _ => await LoadAsync());
+			LoadCommand = new RelayCommand(async _ => await LoadAsync());
 			AddCommand = new RelayCommand(async _ => await AddAsync());
 			DeleteCommand = new RelayCommand(async _ => await DeleteAsync());
 		}
@@ -51,31 +51,31 @@ namespace TestTask.Services
 
 		private async Task AddAsync()
 		{
-            var editVm = new CounterpartyEditViewModel(this._repositoryEmployee);
-            var editWindow = new CounterpartyEditView { DataContext = editVm };
-            editVm.CloseAction = () => editWindow.Close();
+			var editVm = new CounterpartyEditViewModel(this._repositoryEmployee);
+			var editWindow = new CounterpartyEditView { DataContext = editVm };
+			editVm.CloseAction = () => editWindow.Close();
 
-            bool? dialogResult = editWindow.ShowDialog();
+			bool? dialogResult = editWindow.ShowDialog();
 
-            if (editVm.DialogResult == true)
-            {
-                var newCounterparty = new Counterparty
-                {
-                    Name = editVm.Name,
-                    INN = editVm.INN,
-                    CuratorEmployeeId = editVm.CuratorEmployeeId
-                };
+			if (editVm.DialogResult == true)
+			{
+				var newCounterparty = new Counterparty
+				{
+					Name = editVm.Name,
+					INN = editVm.INN,
+					CuratorEmployeeId = editVm.CuratorEmployeeId
+				};
 
-                await _repository.Add(newCounterparty);
-                Counterparties.Add(newCounterparty);
-            }
-        }
+				await _repository.Add(newCounterparty);
+				Counterparties.Add(newCounterparty);
+			}
+		}
 
 		private async Task DeleteAsync()
 		{
 			if (SelectedCounterparty != null)
 			{
-				await _repository.Delete(SelectedCounterparty.Id);
+				await this._repository.Delete(SelectedCounterparty.Id);
 				Counterparties.Remove(SelectedCounterparty);
 			}
 		}
