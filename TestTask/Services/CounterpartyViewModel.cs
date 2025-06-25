@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Test_task.Model;
 using Test_task.Model.Entities;
 using Test_task.Repositories.Interface;
 using Test_task.Services.Interfaces;
@@ -10,7 +11,9 @@ namespace TestTask.Services
 	{
 		private readonly IRepository<Counterparty> _repository;
 
-		public ObservableCollection<Counterparty> Counterparties { get; } = new();
+        private readonly IRepository<Employee> _repositoryEmployee;
+
+        public ObservableCollection<Counterparty> Counterparties { get; } = new();
 
 		private Counterparty _selectedCounterparty;
 		public Counterparty SelectedCounterparty
@@ -27,13 +30,15 @@ namespace TestTask.Services
 		public ICommand AddCommand { get; }
 		public ICommand DeleteCommand { get; }
 
-		public CounterpartyViewModel(IRepository<Counterparty> repository)
+		public CounterpartyViewModel(IRepository<Counterparty> repository, IRepository<Employee> repositoryEmployee)
 		{
 			this._repository = repository;
+			this._repositoryEmployee = repositoryEmployee;
 
-			LoadCommand = new RelayCommand(async _ => await LoadAsync());
+
+            LoadCommand = new RelayCommand(async _ => await LoadAsync());
 			AddCommand = new RelayCommand(async _ => await AddAsync());
-			DeleteCommand = new RelayCommand(async _ => await DeleteAsync(), _ => SelectedCounterparty != null);
+			DeleteCommand = new RelayCommand(async _ => await DeleteAsync());
 		}
 
 		private async Task LoadAsync()
@@ -46,15 +51,25 @@ namespace TestTask.Services
 
 		private async Task AddAsync()
 		{
-			var newCounterparty = new Counterparty
-			{
-				Name = "New Counterparty",
-				INN = "0000000000",
-                CuratorEmployeeId = 1
-			};
-			await _repository.Add(newCounterparty);
-			Counterparties.Add(newCounterparty);
-		}
+            var editVm = new CounterpartyEditViewModel(this._repositoryEmployee);
+            var editWindow = new CounterpartyEditView { DataContext = editVm };
+            editVm.CloseAction = () => editWindow.Close();
+
+            bool? dialogResult = editWindow.ShowDialog();
+
+            if (editVm.DialogResult == true)
+            {
+                var newCounterparty = new Counterparty
+                {
+                    Name = editVm.Name,
+                    INN = editVm.INN,
+                    CuratorEmployeeId = editVm.CuratorEmployeeId
+                };
+
+                await _repository.Add(newCounterparty);
+                Counterparties.Add(newCounterparty);
+            }
+        }
 
 		private async Task DeleteAsync()
 		{

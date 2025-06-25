@@ -1,13 +1,66 @@
 ﻿<Window x:Class="TestTask.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TestTask.Services"
+
         Title="Counterparties" Height="350" Width="525">
     <DockPanel Margin="10">
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10" >
-            <Button Content="Load" Command="{Binding LoadCommand}" Width="75" Margin="0,0,10,0"/>
-            <Button Content="Add" Command="{Binding AddCommand}" Width="75" Margin="0,0,10,0"/>
-            <Button Content="Delete" Command="{Binding DeleteCommand}" Width="75"/>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+            <ComboBox Width="150" ItemsSource="{Binding ModelNames}" SelectedItem="{Binding SelectedModelName}" Margin="0,0,10,0"/>
+            <Button Content="Load" Command="{Binding CurrentViewModel.LoadCommand}" Width="75" Margin="0,0,10,0"/>
+            <Button Content="Add" Command="{Binding CurrentViewModel.AddCommand}" Width="75" Margin="0,0,10,0"/>
+            <Button Content="Delete" Command="{Binding CurrentViewModel.DeleteCommand}" Width="75"/>
         </StackPanel>
-        <ListBox ItemsSource="{Binding Counterparties}" SelectedItem="{Binding SelectedCounterparty}" DisplayMemberPath="Name"/>
+
+        <ContentControl Content="{Binding CurrentViewModel}">
+            <ContentControl.Resources>
+                <!-- DataTemplate для CounterpartyViewModel -->
+                <DataTemplate DataType="{x:Type local:CounterpartyViewModel}">
+                    <ListBox ItemsSource="{Binding Counterparties}" SelectedItem="{Binding SelectedCounterparty}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBlock Text="{Binding Name}" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding INN}" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding CuratorEmployeeId}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DataTemplate>
+
+                <!-- DataTemplate для OrderViewModel -->
+                <DataTemplate DataType="{x:Type local:OrderViewModel}">
+                    <ListBox ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBlock Text="{Binding dateTime}"/>
+                                    <TextBlock Text="{Binding Amount}"/>
+                                    <TextBlock Text="{Binding EmployeeId}"/>
+                                    <TextBlock Text="{Binding OrderId}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DataTemplate>
+
+                <!-- DataTemplate для EmployeeViewModel -->
+                <DataTemplate DataType="{x:Type local:EmployeeViewModel}">
+                    <ListBox ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" >
+                                    <TextBlock Text="{Binding UserName}"/>
+                                    <TextBlock Text="{Binding JobTitle}"/>
+                                    <TextBlock Text="{Binding DOB}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
     </DockPanel>
+
 </Window>

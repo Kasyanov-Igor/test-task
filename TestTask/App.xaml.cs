@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Test_task.Model;
 using Test_task.Model.Entities;
 using Test_task.Repositories;
 using Test_task.Repositories.Interface;
@@ -24,15 +25,21 @@ namespace TestTask
 
             var services = new ServiceCollection();
 
-            // Регистрируем сервисы
+            // Регистрируем зависимости
             services.AddScoped<ADatabaseConnection, SqliteConnection>();
             services.AddScoped<IRepository<Counterparty>, Repository<Counterparty>>();
+            services.AddScoped<IRepository<Employee>, Repository<Employee>>();
+            services.AddScoped<IRepository<Order>, Repository<Order>>();
             services.AddTransient<CounterpartyViewModel>();
+            services.AddScoped<CounterpartyEditViewModel>();
+            services.AddTransient<OrderViewModel>();
+            services.AddTransient<EmployeeViewModel>();
+            services.AddTransient<MainViewModel>();
             services.AddTransient<MainWindow>();
 
-            this._serviceProvider = services.BuildServiceProvider();
+            _serviceProvider = services.BuildServiceProvider();
 
-            var mainWindow = this._serviceProvider.GetRequiredService<MainWindow>();
+            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
     }
