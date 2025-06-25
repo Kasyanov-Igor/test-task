@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Test_task.Model;
+using Test_task.Model.Entities;
 using Test_task.Repositories.Interface;
 using Test_task.Services.Interfaces;
 
@@ -48,14 +44,24 @@ namespace TestTask.Services
 
         private async Task AddAsync()
         {
-            var newEmployee = new Employee
+            var editVm = new EmployeeEditViewModel();
+            var editWindow = new EmployeeEditView { DataContext = editVm };
+            editVm.CloseAction = () => editWindow.Close();
+
+            bool? dialogResult = editWindow.ShowDialog();
+
+            if (editVm.DialogResult == true)
             {
-                UserName = "New User",
-                JobTitle = "New Job",
-                DOB = DateTime.Today
-            };
-            await _repository.Add(newEmployee);
-            Employees.Add(newEmployee);
+                var newUser = new Employee
+                {
+                     UserName = editVm.Name,
+                     JobTitle = editVm.SelectedJobTitle,
+                     DOB = editVm.DOB,
+                };
+
+                await _repository.Add(newUser);
+                Employees.Add(newUser);
+            }
         }
 
         private async Task DeleteAsync()

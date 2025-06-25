@@ -35,10 +35,10 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" >
-                                    <TextBlock Text="{Binding dateTime}"/>
-                                    <TextBlock Text="{Binding Amount}"/>
-                                    <TextBlock Text="{Binding EmployeeId}"/>
-                                    <TextBlock Text="{Binding OrderId}"/>
+                                    <TextBlock Text="{Binding dateTime}" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding Amount}" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding EmployeeId}" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding OrderId}" Margin="0,0,10,0"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -51,8 +51,8 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" >
-                                    <TextBlock Text="{Binding UserName}"/>
-                                    <TextBlock Text="{Binding JobTitle}"/>
+                                    <TextBlock Text="{Binding UserName}" Margin="0,0,10,0"/>
+                                    <TextBlock Text="{Binding JobTitle}" Margin="0,0,10,0"/>
                                     <TextBlock Text="{Binding DOB}"/>
                                 </StackPanel>
                             </DataTemplate>

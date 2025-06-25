@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Test_task.Model;
 using Test_task.Model.Entities;
 using Test_task.Repositories.Interface;
 using Test_task.Services.Interfaces;
@@ -9,6 +10,8 @@ namespace TestTask.Services
     public class OrderViewModel : ViewModel
     {
         private readonly IRepository<Order> _repository;
+        private readonly IRepository<Employee> _repositoryEmployee;
+        private readonly IRepository<Counterparty> _repositoryCounterparty;
 
         public ObservableCollection<Order> Orders { get; } = new();
 
@@ -23,9 +26,13 @@ namespace TestTask.Services
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
 
-        public OrderViewModel(IRepository<Order> repository)
+        public OrderViewModel(IRepository<Order> repository, IRepository<Employee> repositoryEmployee, IRepository<Counterparty> repositoryCounterparty)
         {
-            _repository = repository;
+            this._repository = repository;
+
+            this._repositoryEmployee = repositoryEmployee;
+
+            this._repositoryCounterparty = repositoryCounterparty;
 
             LoadCommand = new RelayCommand(async _ => await LoadAsync());
             AddCommand = new RelayCommand(async _ => await AddAsync());
@@ -43,15 +50,22 @@ namespace TestTask.Services
 
         private async Task AddAsync()
         {
-            var newOrder = new Order
+            var editVm = new OrderViewEditModel(this._repositoryEmployee, this._repositoryCounterparty);
+            var editWindow = new OrderEditView { DataContext = editVm };
+            editVm.CloseAction = () => editWindow.Close();
+
+            bool? dialogResult = editWindow.ShowDialog();
+
+            if (editVm.DialogResult == true)
             {
-                dateTime = DateTime.Now,
-                Amount = 0,
-                EmployeeId = 0,
-                OrderId = 0
-            };
-            await _repository.Add(newOrder);
-            Orders.Add(newOrder);
+                var newOrder = new Order
+                {
+
+                };
+
+                await _repository.Add(newOrder);
+                Orders.Add(newOrder);
+            }
         }
 
         private async Task DeleteAsync()
