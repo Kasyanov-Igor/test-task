@@ -6,7 +6,6 @@ using Test_task.Model;
 using Test_task.Model.Entities;
 using Test_task.Repositories;
 using Test_task.Repositories.Interface;
-using Test_task.Services;
 using Test_task.Services.Interfaces;
 using TestTask.Services;
 
@@ -26,7 +25,7 @@ namespace TestTask
             var services = new ServiceCollection();
 
             // Регистрируем зависимости
-            services.AddScoped<ADatabaseConnection, SqliteConnection>();
+            services.AddScoped<ADatabaseConnection, MySQLConnection>();
             services.AddScoped<IRepository<Counterparty>, Repository<Counterparty>>();
             services.AddScoped<IRepository<Employee>, Repository<Employee>>();
             services.AddScoped<IRepository<Order>, Repository<Order>>();

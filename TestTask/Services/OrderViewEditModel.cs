@@ -40,8 +40,8 @@ namespace TestTask.Services
         private int _curatorCounterpartyId;
         public int CuratorCounterpartyId
         {
-            get => _curatorEmployeeId;
-            set => SetProperty(ref _curatorEmployeeId, value);
+            get => _curatorCounterpartyId;
+            set => SetProperty(ref _curatorCounterpartyId, value);
         }
 
         public ICommand OkCommand { get; }
@@ -55,8 +55,6 @@ namespace TestTask.Services
             this._dob = new DateTime(DateTime.Now.Year - 25, 1, 1);
             this._repositoryEmployee = repositoryEmployee;
             this._repositoryCounterparty = repositoryCounterparty;
-            LoadEmployees();
-            LoadCounterparty();
 
             OkCommand = new RelayCommand(_ =>
             {
@@ -73,6 +71,12 @@ namespace TestTask.Services
             });
         }
 
+        public async Task InitializeAsync()
+        {
+            await LoadCounterparty();
+            await LoadEmployees();
+        }
+
         private async Task LoadEmployees()
         {
             var items = await _repositoryEmployee.Get();
@@ -84,10 +88,10 @@ namespace TestTask.Services
 
         private async Task LoadCounterparty()
         {
-            var items = await _repositoryCounterparty.Get();
+            var items2 = await _repositoryCounterparty.Get();
 
             Counterpartys.Clear();
-            foreach (var item in items)
+            foreach (var item in items2)
                 Counterpartys.Add(item);
         }
     }
