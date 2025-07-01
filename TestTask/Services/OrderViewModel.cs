@@ -51,6 +51,7 @@ namespace TestTask.Services
         private async Task AddAsync()
         {
             var editVm = new OrderViewEditModel(this._repositoryEmployee, this._repositoryCounterparty);
+            await editVm.InitializeAsync();
             var editWindow = new OrderEditView { DataContext = editVm };
             editVm.CloseAction = () => editWindow.Close();
 

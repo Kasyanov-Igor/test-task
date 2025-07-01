@@ -5,7 +5,7 @@ namespace TestTask.Services
 {
     public class MySQLConnection : ADatabaseConnection
     {
-        public const string _DATABASE_NAME = "../DB.db";
+        public const string _DATABASE_NAME = "DB";
 
         public const string USER = "user";
 
@@ -13,7 +13,7 @@ namespace TestTask.Services
 
         protected override string ReturnConnectionString()
         {
-            return $"server=localhost;user={USER};password={PASSWORD};database={_DATABASE_NAME}";
+            return $"server=localhost;port=3300;user={USER};password={PASSWORD};database={_DATABASE_NAME}";
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
